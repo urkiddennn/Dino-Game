@@ -1,6 +1,9 @@
 import kaboom from "kaboom";
 
 let SPEED = 300;
+
+let HIGHSCORE = 0;
+
 kaboom({
   global: true,
   fullscreen: true,
@@ -92,6 +95,7 @@ scene("game", () => {
 });
 
 scene("lose", (score) => {
+  let highScore = 0;
   add([
     sprite("dino"),
     pos(width() / 2, height() / 2 - 80),
@@ -99,9 +103,18 @@ scene("lose", (score) => {
     anchor("center"),
   ]);
 
+  if (score > highScore) {
+    highScore = score;
+  }
   // display score
   add([
-    text(score),
+    text("Score:" + score),
+    pos(width() / 2, height() / 2 + 200),
+    scale(2),
+    anchor("center"),
+  ]);
+  add([
+    text("HighScore:" + highScore),
     pos(width() / 2, height() / 2 + 80),
     scale(2),
     anchor("center"),
