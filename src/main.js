@@ -67,7 +67,7 @@ scene("game", () => {
   onUpdate(() => {
     score++;
     scoreLabel.text = score;
-    SPEED += 10;
+    SPEED += 1;
     speedLabel.text = SPEED;
   });
 
@@ -82,7 +82,7 @@ scene("game", () => {
   onKeyPress("space", () => {
     if (player.isGrounded()) {
       player.play("jump");
-      player.jump();
+      player.jump(700);
     }
   });
 
