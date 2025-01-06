@@ -1,5 +1,6 @@
 import kaboom from "kaboom";
 
+let SPEED = 300;
 kaboom({
   global: true,
   fullscreen: true,
@@ -24,6 +25,7 @@ loadSprite("dino", "../src/assets/dino.png", {
 scene("game", () => {
   let score = 0;
   const scoreLabel = add([text(score), pos(24, 24)]);
+  const speedLabel = add([text(SPEED), pos(width() - 100, 24)]);
   const player = add([
     sprite("dino"),
     pos(64, height() / 1.5),
@@ -44,23 +46,29 @@ scene("game", () => {
     "ground",
   ]);
 
-  loop(2, () => {
-    //obstacle
+  function spawnTree() {
+    // add tree obj
     add([
-      rect(48, rand(24, 64)),
+      rect(48, rand(32, 96)),
       area(),
       outline(4),
       pos(width(), height() - 48),
       anchor("botleft"),
       color(255, 180, 255),
-      move(LEFT, 240),
-      "tree", // add a tag here
+      move(LEFT, SPEED),
+      "tree",
     ]);
-  });
+
+    // wait a random amount of time to spawn next tree
+    wait(2, spawnTree);
+  }
+  spawnTree();
 
   onUpdate(() => {
     score++;
     scoreLabel.text = score;
+    SPEED += 10;
+    speedLabel.text = SPEED;
   });
 
   player.onCollide("tree", () => {
@@ -68,6 +76,7 @@ scene("game", () => {
     player.play("hit");
     burp();
     addKaboom(player.pos);
+    SPEED = 300;
     go("lose", score);
   });
   onKeyPress("space", () => {
